@@ -17,17 +17,18 @@ def preprocess_era5(ds: xr.Dataset, var="z") -> xr.Dataset:
     # lower resolution:
     ds_coarse = ds.coarsen(latitude=5, longitude=5, boundary="trim").max() # TODO: check that max works
 
+    # resampling:
     weekly = ds_coarse.resample(valid_time = "1W")
     
-    # take weekly aggr:
+    qs = weekly.quantile([0.25, 0.75], dim="valid_time")[var]
     out = xr.Dataset({
         "mean": weekly.mean()[var],
         "median": weekly.median()[var],
         "min": weekly.min()[var],
         "max": weekly.max()[var],
         "std": weekly.std()[var],
-        "p25": weekly.quantile(0.25)[var],
-        "p75": weekly.quantile(0.75)[var],
+        "p25": qs.sel(quantile=0.25).drop_vars("quantile"),
+        "p75": qs.sel(quantile=0.75).drop_vars("quantile"),
     })
     return out
 
