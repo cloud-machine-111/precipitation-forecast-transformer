@@ -42,7 +42,8 @@ request = {
     ],
     "data_format": "netcdf",
     "download_format": "zip",
-    "area": [5, -75, -20, -45]
+    "area": [0, -70, -10, -60],
+    'grid': [0.25, 0.25],
 }
 
 def make_request(year):
