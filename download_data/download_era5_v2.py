@@ -12,10 +12,7 @@ request = {
         "1980"
     ],
     "month": [
-        "01", "02", "03",
-        "04", "05", "06",
-        "07", "08", "09",
-        "10", "11", "12"
+        "01", 
     ],
     "day": [
         "01", "02", "03",
@@ -46,14 +43,17 @@ request = {
     'grid': [0.25, 0.25],
 }
 
-def make_request(year):
+def make_request(year, month):
     request["year"] = [year]
-    file = "era5_data/era5_amazon_single_levels_" + year
+    request["month"] = [month]
+    file = "era5_data/era5_amazon_single_levels_" + year + "_" + month
     client.retrieve(dataset, request, file)
     
 
 years = [str(year) for year in range(1981, 2020)]
+months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
 
 
 for year in years:
-    make_request(year)
+    for month in months:
+        make_request(year, month)
