@@ -1,18 +1,17 @@
 import cdsapi
- 
+import os
+from coordinates import AMAZON_COORDS, SOUTH_BRAZIL_COORDS
 client = cdsapi.Client()
-dataset = "reanalysis-era5-single-levels"
+dataset = "reanalysis-era5-pressure-levels"
 request = {
     "product_type": ["reanalysis"],
-    "variable": [
-        "geopotential"
-    ],
-    "pressure_level": ["500"],
-    "year": [
-        "1980"
-    ],
+    "variable": ["geopotential"],
+    "year": ["1980"],
     "month": [
-        "01", 
+        "01", "02", "03",
+        "04", "05", "06",
+        "07", "08", "09",
+        "10", "11", "12"
     ],
     "day": [
         "01", "02", "03",
@@ -37,20 +36,28 @@ request = {
         "18:00", "19:00", "20:00",
         "21:00", "22:00", "23:00"
     ],
+    "pressure_level": ["500"],
     "data_format": "netcdf",
-    "download_format": "zip",
-    "area": [0, -70, -10, -60], # <- change for brazil
+    "download_format": "unarchived",
+    "area": [0, -70, -60, -10], #  (North, West, South, East) / should be [0, -70, -10, -60]
     'grid': [0.25, 0.25],
 }
+def file_exists(path):
+    return os.path.exists(path)
 
 def make_request(year, month):
-    request["year"] = [year]
-    request["month"] = [month]
-    file = "era5_data/era5_amazon_geopotential_" + year + "_" + month
-    client.retrieve(dataset, request, file)
+    file = "era5_data/amazon_geopotential/era5_amazon_geopotential_" + year + "_" + month + ".nc"
+    print("trying " + file)
+    if file_exists(file):
+        print(file + " already exists")
+    else:
+        request["year"] = [year]
+        request["month"] = [month]
+        client.retrieve(dataset, request, file)
+        print(file + " created")
     
 
-years = [str(year) for year in range(2000, 2020)]
+years = [str(year) for year in range(1981, 2020)]
 months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
 
 

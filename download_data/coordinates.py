@@ -1,2 +1,3 @@
+#  (North, West, South, East)
 AMAZON_COORDS = [0, -70, -10, -60]
 SOUTH_BRAZIL_COORDS = [-22, -57, -34, -48]
