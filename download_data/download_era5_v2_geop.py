@@ -1,6 +1,6 @@
 import cdsapi
 import os
- 
+from coordinates import AMAZON_COORDS, SOUTH_BRAZIL_COORDS
 client = cdsapi.Client()
 dataset = "reanalysis-era5-pressure-levels"
 request = {
@@ -39,7 +39,7 @@ request = {
     "pressure_level": ["500"],
     "data_format": "netcdf",
     "download_format": "unarchived",
-    "area": [0, -70, -60, -10],
+    "area": [0, -70, -60, -10], #  (North, West, South, East) / should be [0, -70, -10, -60]
     'grid': [0.25, 0.25],
 }
 def file_exists(path):
